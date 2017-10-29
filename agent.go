@@ -15,15 +15,15 @@ func main() {
 	addr := "localhost:110"
 	tcpAddr, err := net.ResolveTCPAddr("tcp4", addr)
 	if err != nil {
-		log.Print(err)
-		log.Print("建立TcpAddr对象失败")
+		log.Println(err)
+		log.Println("建立TcpAddr对象失败")
 		//退出程序
 		os.Exit(1)
 	}
 	connTcp, err := net.DialTCP("tcp4", nil, tcpAddr)
 	if err != nil {
-		log.Print(err)
-		log.Print("建立Server通迅失败")
+		log.Println(err)
+		log.Println("建立Server通迅失败")
 		os.Exit(1)
 	}
 
@@ -33,6 +33,7 @@ func main() {
 	go func() {
 		for {
 			var s string;
+			fmt.Println("请输入要发送的消息：")
 			fmt.Scanf("%s", &s)
 			connTcp.Write([]byte(s))
 		}
@@ -55,10 +56,10 @@ func listenServerMessage(connTcp *net.TCPConn) {
 	buf := make([]byte, 1024)
 	n, err := connTcp.Read(buf)
 	if err != nil {
-		log.Print(err)
+		log.Println(err)
 		connTcp.Close()
 		os.Exit(1)
 		return
 	}
-	log.Print("server message: ", string(buf[0:n]))
+	log.Println("server message: ", string(buf[0:n]))
 }

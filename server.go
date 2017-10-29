@@ -14,7 +14,7 @@ var wg_server sync.WaitGroup
 func main() {
 	listen_socket, err := net.Listen("tcp4", "localhost:110")
 	if err != nil {
-		log.Print(err)
+		log.Println(err)
 	}
 	defer listen_socket.Close()
 
@@ -28,6 +28,7 @@ func main() {
 			if err != nil {
 				continue
 			}
+			fmt.Println(new_conn.RemoteAddr().String() + " 上线了")
 			go sendClient(new_conn)
 		}
 		wg_server.Done()
@@ -46,6 +47,7 @@ func main() {
 	go func() {
 		for {
 			var s string;
+			fmt.Println("请输入客户端标识：")
 			fmt.Scanf("%s", &s)
 			go oneClientListen(s)
 		}
@@ -62,22 +64,22 @@ func sendClient(new_conn net.Conn) {
 	for {
 		n, err := new_conn.Read(buf)
 		if err != nil {
-			log.Print(err)
+			log.Println(err)
 			//移除已经关闭的客户端，维护客户端队列
 			removeClient(new_conn)
 			new_conn.Close()
 			return
 		}
-		log.Print(new_conn.RemoteAddr().String()+" clien msg:", string(buf[0:n]))
+		log.Println(new_conn.RemoteAddr().String()+" clien msg:", string(buf[0:n]))
 	}
 }
 
 func removeClient(new_conn net.Conn) {
-	log.Print(clientArr)
-	log.Print(new_conn.RemoteAddr().String() + " 已经阵亡")
+	log.Println(clientArr)
+	log.Println(new_conn.RemoteAddr().String() + " 已经阵亡")
 	delete(clientArr, new_conn.RemoteAddr().String())
-	log.Print("delete close conn")
-	log.Print(clientArr)
+	log.Println("delete close conn")
+	log.Println(clientArr)
 	return
 }
 
@@ -87,7 +89,7 @@ func clientListen() {
 			v.Write([]byte("所有人休息会！！！！额要啪啪啪"))
 		}
 	} else {
-		log.Print("no connection " + string(len(clientArr)))
+		log.Println("no connection " + string(len(clientArr)))
 	}
 }
 
@@ -96,6 +98,6 @@ func oneClientListen(s string) {
 		//存在
 		clientArr[s].Write([]byte("单独找你，papapapapappa"))
 	} else {
-		log.Print(s + " 已经***过度而去")
+		log.Println(s + " 已经***过度而去")
 	}
 }
