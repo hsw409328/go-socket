@@ -47,9 +47,11 @@ func main() {
 	go func() {
 		for {
 			var s string;
-			fmt.Println("请输入客户端标识：")
+			fmt.Print("请输入客户端标识：")
 			fmt.Scanf("%s", &s)
-			go oneClientListen(s)
+			if len(s) > 0 {
+				go oneClientListen(s)
+			}
 		}
 		wg_server.Done()
 	}()
@@ -95,8 +97,8 @@ func clientListen() {
 
 func oneClientListen(s string) {
 	if _, ok := clientArr[s]; ok {
-		//存在
 		clientArr[s].Write([]byte("单独找你，papapapapappa"))
+		log.Println("发送成功")
 	} else {
 		log.Println(s + " 已经***过度而去")
 	}

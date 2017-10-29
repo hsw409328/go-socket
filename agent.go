@@ -33,7 +33,7 @@ func main() {
 	go func() {
 		for {
 			var s string;
-			fmt.Println("请输入要发送的消息：")
+			fmt.Print("请输入要发送的消息：")
 			fmt.Scanf("%s", &s)
 			connTcp.Write([]byte(s))
 		}
@@ -44,7 +44,7 @@ func main() {
 	go func() {
 		for {
 			go listenServerMessage(connTcp)
-			time.Sleep(time.Second * 10)
+			time.Sleep(time.Second * 3)
 		}
 		wg_client.Done()
 	}()
